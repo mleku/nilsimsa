@@ -5,20 +5,12 @@ import (
 )
 
 func Evaluate(a, b []byte) (bitDiffCount int, err error) {
-	// Check if the lengths of the strings are the same
-	if len(a) != len(b) {
-		return 0, fmt.Errorf("byte strings are of different lengths %d and %d", len(a), len(b))
-	}
-	if len(a) != 32 || len(b) != 32 {
-		return 0, fmt.Errorf("input nilsimsa hashes must be 32 bytes each, got %d and %d",
-			len(a), len(b))
-	}
-
-	// Count the differing bits
 	var c []byte
-	c, err = XOR(a, b)
-	for i := 0; i < len(a); i++ {
-		bitDiffCount += countBits(c[i])
+	if c, err = XOR(a, b); err != nil {
+		return
+	}
+	for _, v := range c {
+		bitDiffCount += countBits(v)
 	}
 	return bitDiffCount, nil
 }
