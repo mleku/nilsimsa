@@ -10,12 +10,12 @@ import (
 // computes the nilsimsa Digest and compares to the true
 // value stored in the pickled sid_to_nil dictionary
 func TestNilsimsa(t *testing.T) {
-	x := HexSum([]byte{})
+	x, _ := HexSum([]byte{})
 	if x != "0000000000000000000000000000000000000000000000000000000000000000" {
 		t.Fatal(x)
 	}
 
-	x = HexSum([]byte("abcdefgh"))
+	x, _ = HexSum([]byte("abcdefgh"))
 	if x != "14c8118000000000030800000004042004189020001308014088003280000078" {
 		t.Fatal(x)
 	}
@@ -35,8 +35,8 @@ func TestNilsimsa(t *testing.T) {
 		t.Fatal(x)
 	}
 
-	digest1 := Sum([]byte("abcdefghijk"))
-	digest2 := Sum([]byte("abcdefgh"))
+	digest1, _ := Sum([]byte("abcdefghijk"))
+	digest2, _ := Sum([]byte("abcdefgh"))
 	bitsDiff := BitsDiff(&digest1, &digest2)
 	if bitsDiff != 109 {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
@@ -53,16 +53,16 @@ func TestNilsimsa(t *testing.T) {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
 	}
 
-	x1 := HexSum([]byte("abcdefghijk"))
-	x2 := HexSum([]byte("abcdefgh"))
+	x1, _ := HexSum([]byte("abcdefghijk"))
+	x2, _ := HexSum([]byte("abcdefgh"))
 	bitsDiff = BitsDiffHex(x1, x2)
 	if bitsDiff != 109 {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
 	}
 
-	x1 = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
+	x1, _ = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
 		"(srcPath, dstPath)"))
-	x2 = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
+	x2, _ = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
 		"(dstPath, srcPath)"))
 	if x1 != "8beb55d08d78fed441ede9301390b49b716a11af3962db70b24540338cb70035" {
 		t.Fatal(x1)
@@ -75,8 +75,8 @@ func TestNilsimsa(t *testing.T) {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
 	}
 
-	x1 = HexSum([]byte("return diff.XYZ"))
-	x2 = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
+	x1, _ = HexSum([]byte("return diff.XYZ"))
+	x2, _ = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
 		"(dstPath, srcPath)"))
 	if x1 != "84125570884ae840f042ea400400009a721891002011a071225247f7a5241018" {
 		t.Fatal(x1)
@@ -89,8 +89,8 @@ func TestNilsimsa(t *testing.T) {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
 	}
 
-	digest1 = Sum([]byte("C.setTabChangeCallbackWrapper(h.ih())"))
-	digest2 = Sum([]byte("C.setTabChangeCallbackWrapper(ih)"))
+	digest1, _ = Sum([]byte("C.setTabChangeCallbackWrapper(h.ih())"))
+	digest2, _ = Sum([]byte("C.setTabChangeCallbackWrapper(ih)"))
 	bitsDiff = BitsDiff(&digest1, &digest2)
 	if bitsDiff != 40 {
 		t.Fatalf("bitsDiff(%d)", bitsDiff)
@@ -320,7 +320,7 @@ public class Nilsimsa {
     }
 }
 `
-	x := HexSum([]byte(nilsimsaJavaimplementation))
+	x, _ := HexSum([]byte(nilsimsaJavaimplementation))
 	if x != "4c900d44043f014c40f40040d8201000f246227123b28864013040008240204a" {
 		t.Fatal(x)
 	}
@@ -428,7 +428,7 @@ func TestNilsimsa3(t *testing.T) {
 		panic("len(list) != len(results)")
 	}
 	for i, x := range list {
-		hex := HexSum([]byte(x))
+		hex, _ := HexSum([]byte(x))
 		if hex != results[i] {
 			t.Fatal(hex)
 		}
@@ -437,9 +437,9 @@ func TestNilsimsa3(t *testing.T) {
 	if len(list) != len(compareResults)+1 {
 		panic("len(list) != len(compareResults) + 1")
 	}
-	last := Sum([]byte(list[0]))
+	last, _ := Sum([]byte(list[0]))
 	for i, x := range list[1:] {
-		sum := Sum([]byte(x))
+		sum, _ := Sum([]byte(x))
 		bits := BitsDiff(&sum, &last)
 		if bits != compareResults[i] {
 			t.Fatalf("%x", bits)
@@ -448,9 +448,9 @@ func TestNilsimsa3(t *testing.T) {
 	}
 
 	j := 0
-	last = Sum([]byte(list[0]))
+	last, _ = Sum([]byte(list[0]))
 	for i := 4; i < len(list); i += 3 {
-		sum := Sum([]byte(list[i]))
+		sum, _ := Sum([]byte(list[i]))
 		bits := BitsDiff(&sum, &last)
 		if bits != step3CompareResults[j] {
 			t.Fatalf("%x", bits)
