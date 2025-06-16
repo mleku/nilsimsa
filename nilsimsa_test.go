@@ -1,23 +1,23 @@
 package nilsimsa
 
 import (
-	"testing"
 	"fmt"
 	"io"
+	"testing"
 )
 
 // tests the nilsimsa hash by choosing a random test file
-// computes the nilsimsa digest and compares to the true
+// computes the nilsimsa Digest and compares to the true
 // value stored in the pickled sid_to_nil dictionary
 func TestNilsimsa(t *testing.T) {
 	x := HexSum([]byte{})
 	if x != "0000000000000000000000000000000000000000000000000000000000000000" {
-		t.Fatalf(x)
+		t.Fatal(x)
 	}
 
 	x = HexSum([]byte("abcdefgh"))
 	if x != "14c8118000000000030800000004042004189020001308014088003280000078" {
-		t.Fatalf(x)
+		t.Fatal(x)
 	}
 
 	// Doing it the long way using incremental update
@@ -26,13 +26,13 @@ func TestNilsimsa(t *testing.T) {
 	io.WriteString(d, "efgh")
 	x = fmt.Sprintf("%x", d.Sum(nil))
 	if x != "14c8118000000000030800000004042004189020001308014088003280000078" {
-		t.Fatalf(x)
+		t.Fatal(x)
 	}
 
 	io.WriteString(d, "ijk")
 	x = fmt.Sprintf("%x", d.Sum(nil))
 	if x != "14c811840010000c0328200108040630041890200217582d4098103280000078" {
-		t.Fatalf(x)
+		t.Fatal(x)
 	}
 
 	digest1 := Sum([]byte("abcdefghijk"))
@@ -64,11 +64,11 @@ func TestNilsimsa(t *testing.T) {
 		"(srcPath, dstPath)"))
 	x2 = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
 		"(dstPath, srcPath)"))
-	if x1 != "8beb55d08d78fed441ede9301390b49b716a11af3962db70b24540338cb70035"{
-		t.Fatalf(x1)
+	if x1 != "8beb55d08d78fed441ede9301390b49b716a11af3962db70b24540338cb70035" {
+		t.Fatal(x1)
 	}
-	if x2 != "8a5355d09968f8d451efeb309919949b73e211af7952c970f245403b8cb7a035"{
-		t.Fatalf(x2)
+	if x2 != "8a5355d09968f8d451efeb309919949b73e211af7952c970f245403b8cb7a035" {
+		t.Fatal(x2)
 	}
 	bitsDiff = BitsDiffHex(x1, x2)
 	if bitsDiff != 96 {
@@ -78,11 +78,11 @@ func TestNilsimsa(t *testing.T) {
 	x1 = HexSum([]byte("return diff.XYZ"))
 	x2 = HexSum([]byte("return diff.NewSequenceMatcherFromFiles" +
 		"(dstPath, srcPath)"))
-	if x1 != "84125570884ae840f042ea400400009a721891002011a071225247f7a5241018"{
-		t.Fatalf(x1)
+	if x1 != "84125570884ae840f042ea400400009a721891002011a071225247f7a5241018" {
+		t.Fatal(x1)
 	}
-	if x2 != "8a5355d09968f8d451efeb309919949b73e211af7952c970f245403b8cb7a035"{
-		t.Fatalf(x2)
+	if x2 != "8a5355d09968f8d451efeb309919949b73e211af7952c970f245403b8cb7a035" {
+		t.Fatal(x2)
 	}
 	bitsDiff = BitsDiffHex(x1, x2)
 	if bitsDiff != 35 {
@@ -136,7 +136,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class Nilsimsa {
 
     private int count    = 0;            // num characters seen
-    private int[] acc    = new int[256]; // accumulators for the digest
+    private int[] acc    = new int[256]; // accumulators for the Digest
     private int[] lastch = new int[4];   // the last four seen characters
 
     // pre-defined transformation arrays
@@ -184,7 +184,7 @@ public class Nilsimsa {
     }
 
     /**
-     * Updates the Nilsimsa digest using the given String
+     * Updates the Nilsimsa Digest using the given String
      * @param s: the String data to consider in the update
      */
     public void update(String s)  {
@@ -245,13 +245,13 @@ public class Nilsimsa {
     }
 
     /**
-     * @return the digest for the current Nilsimsa object.
+     * @return the Digest for the current Nilsimsa object.
      */
-    public byte[] digest() {
+    public byte[] Digest() {
         int total = 0;
         int threshold;
-        byte[] digest = new byte[32];
-        Arrays.fill(digest, (byte)0);
+        byte[] Digest = new byte[32];
+        Arrays.fill(Digest, (byte)0);
 
         if (count == 3) {
             total = 1;
@@ -264,11 +264,11 @@ public class Nilsimsa {
 
         for (int i=0; i<256; i++) {
             if (acc[i] > threshold) {
-                digest[ i>>3 ] += 1 << (i&7);
+                Digest[ i>>3 ] += 1 << (i&7);
             }
         }
-        ArrayUtils.reverse( digest );
-        return digest;
+        ArrayUtils.reverse( Digest );
+        return Digest;
     }
 
     /**
@@ -276,18 +276,18 @@ public class Nilsimsa {
      *      the Nilsimsa object.
      */
     public String hexdigest() {
-        return Hex.encodeHexString( digest() );
+        return Hex.encodeHexString( Digest() );
     }
 
     /**
-     * Compute the Nilsimsa digest for the given String.
+     * Compute the Nilsimsa Digest for the given String.
      * @param s: the String to hash
-     * @return the Nilsimsa digest.
+     * @return the Nilsimsa Digest.
      */
-    public byte[] digest(String s) {
+    public byte[] Digest(String s) {
         reset();
         update(s);
-        return digest();
+        return Digest();
     }
 
     /**
@@ -297,7 +297,7 @@ public class Nilsimsa {
      */
 
     public String hexdigest(String s) {
-        return Hex.encodeHexString( digest(s) );
+        return Hex.encodeHexString( Digest(s) );
     }
 
     /**
@@ -309,8 +309,8 @@ public class Nilsimsa {
     public int compare(Nilsimsa cmp) {
         byte bits = 0;
         int j;
-        byte[] n1 = digest();
-        byte[] n2 = cmp.digest();
+        byte[] n1 = Digest();
+        byte[] n2 = cmp.Digest();
 
         for (int i=0; i<32; i++) {
             j = 255 & n1[i] ^ n2[i];
@@ -322,142 +322,140 @@ public class Nilsimsa {
 `
 	x := HexSum([]byte(nilsimsaJavaimplementation))
 	if x != "4c900d44043f014c40f40040d8201000f246227123b28864013040008240204a" {
-		t.Fatalf(x)
+		t.Fatal(x)
 	}
 }
 
-
 func TestNilsimsa3(t *testing.T) {
-    list := [...]string{
-        "a",
-        "ab",
-        "abc",
-        "abcd",
-        "abcde",
-        "abcdef",
-        "abcdefg",
-        "abcdefgh",
-        "abcdefghi",
-        "abcdefghij",
-        "abcdefghijk",
-        "abcdefghijkl",
-        "abcdefghijklm",
-        "abcdefghijklmn",
-        "abcdefghijklmno",
-        "abcdefghijklmnop",
-        "abcdefghijklmnopq",
-        "abcdefghijklmnopqr",
-        "abcdefghijklmnopqrs",
-        "abcdefghijklmnopqrst",
-        "abcdefghijklmnopqrstu",
-        "abcdefghijklmnopqrstuv",
-        "abcdefghijklmnopqrstuvw",
-        "abcdefghijklmnopqrstuvwx",
-        "abcdefghijklmnopqrstuvwxy",
-        "abcdefghijklmnopqrstuvwxyz",
+	list := [...]string{
+		"a",
+		"ab",
+		"abc",
+		"abcd",
+		"abcde",
+		"abcdef",
+		"abcdefg",
+		"abcdefgh",
+		"abcdefghi",
+		"abcdefghij",
+		"abcdefghijk",
+		"abcdefghijkl",
+		"abcdefghijklm",
+		"abcdefghijklmn",
+		"abcdefghijklmno",
+		"abcdefghijklmnop",
+		"abcdefghijklmnopq",
+		"abcdefghijklmnopqr",
+		"abcdefghijklmnopqrs",
+		"abcdefghijklmnopqrst",
+		"abcdefghijklmnopqrstu",
+		"abcdefghijklmnopqrstuv",
+		"abcdefghijklmnopqrstuvw",
+		"abcdefghijklmnopqrstuvwx",
+		"abcdefghijklmnopqrstuvwxy",
+		"abcdefghijklmnopqrstuvwxyz",
 	}
 
-    results := [...]string{
-        "0000000000000000000000000000000000000000000000000000000000000000",
-        "0000000000000000000000000000000000000000000000000000000000000000",
-        "0040000000000000000000000000000000000000000000000000000000000000",
-        "0440000000000000000000000000000000100000000000000008000000000000",
-        "0440008000000000000000000000000000100020001200000008001200000050",
-        "04c0018000000000000000000000000004188020001200000088001280000058",
-        "04c8118000000000030000000000002004188020001208004088001280000078",
-        "14c8118000000000030800000004042004189020001308014088003280000078",
-        "14c8118400000000030800010804043004189020021318094098003280000078",
-        "14c81184000000000308200108040430041890200217580d4098103280000078",
-        "14c811840010000c0328200108040630041890200217582d4098103280000078",
-        "14c811840010000ca328200108044630041890200a17586d4298103280000078",
-        "14ca11850010000ca328200188044630041898200a17586dc2d8103284000078",
-        "14ca11850030004ca3a8200188044630041898200a17586dc2d8107284000078",
-        "14ca11850032004ca3a8284188044730041898200a17586dc2d8107384000078",
-        "94ca11850432005ca3a828418804473004199c200a17586dc2d8107384004178",
-        "94ca11850433005ca3a82841880447341419be200a17586dc2d8107384004178",
-        "94ca11850433005ca3a82841a88457341419be201a17586dc6d8107384084178",
-        "94ca11850533005ca3b82841a88657361419be201a17586dc6d8107384084178",
-        "94ca11850533005ca3b82841aa8657371419be201a17587dc6d81077840c4178",
-        "94ca15850533005ca3b92841aa8657371419be201a17587dd6d81077844cc178",
-        "94ca15850533005ca3b92849aa8657371419be201a17587fd6d81077844cc978",
-        "94ca15850533045cabb92869aa8657371419bea01a17587fd6f81077c44cc978",
-        "94ca95850533045cabb93869aa8657371499beb01a17587fd6f8107fc44cc978",
-        "94ca95850733045cabb93869aa8657373499beb01a17587fd6f9107fc54cc978",
-        "94ca95850773045cabb93869ba8657373499beb81a17587fd6f9107fc54cc978",
+	results := [...]string{
+		"0000000000000000000000000000000000000000000000000000000000000000",
+		"0000000000000000000000000000000000000000000000000000000000000000",
+		"0040000000000000000000000000000000000000000000000000000000000000",
+		"0440000000000000000000000000000000100000000000000008000000000000",
+		"0440008000000000000000000000000000100020001200000008001200000050",
+		"04c0018000000000000000000000000004188020001200000088001280000058",
+		"04c8118000000000030000000000002004188020001208004088001280000078",
+		"14c8118000000000030800000004042004189020001308014088003280000078",
+		"14c8118400000000030800010804043004189020021318094098003280000078",
+		"14c81184000000000308200108040430041890200217580d4098103280000078",
+		"14c811840010000c0328200108040630041890200217582d4098103280000078",
+		"14c811840010000ca328200108044630041890200a17586d4298103280000078",
+		"14ca11850010000ca328200188044630041898200a17586dc2d8103284000078",
+		"14ca11850030004ca3a8200188044630041898200a17586dc2d8107284000078",
+		"14ca11850032004ca3a8284188044730041898200a17586dc2d8107384000078",
+		"94ca11850432005ca3a828418804473004199c200a17586dc2d8107384004178",
+		"94ca11850433005ca3a82841880447341419be200a17586dc2d8107384004178",
+		"94ca11850433005ca3a82841a88457341419be201a17586dc6d8107384084178",
+		"94ca11850533005ca3b82841a88657361419be201a17586dc6d8107384084178",
+		"94ca11850533005ca3b82841aa8657371419be201a17587dc6d81077840c4178",
+		"94ca15850533005ca3b92841aa8657371419be201a17587dd6d81077844cc178",
+		"94ca15850533005ca3b92849aa8657371419be201a17587fd6d81077844cc978",
+		"94ca15850533045cabb92869aa8657371419bea01a17587fd6f81077c44cc978",
+		"94ca95850533045cabb93869aa8657371499beb01a17587fd6f8107fc44cc978",
+		"94ca95850733045cabb93869aa8657373499beb01a17587fd6f9107fc54cc978",
+		"94ca95850773045cabb93869ba8657373499beb81a17587fd6f9107fc54cc978",
 	}
 
-    compareResults := [...]byte {
-        128,
-        127,
-        125,
-        120,
-        120,
-        120,
-        120,
-        120,
-        123,
-        122,
-        122,
-        121,
-        124,
-        123,
-        121,
-        123,
-        122,
-        124,
-        123,
-        123,
-        125,
-        122,
-        123,
-        124,
-        125,
+	compareResults := [...]byte{
+		128,
+		127,
+		125,
+		120,
+		120,
+		120,
+		120,
+		120,
+		123,
+		122,
+		122,
+		121,
+		124,
+		123,
+		121,
+		123,
+		122,
+		124,
+		123,
+		123,
+		125,
+		122,
+		123,
+		124,
+		125,
 	}
 
-    step3CompareResults := [...]byte{
-        116,
-        104,
-        109,
-        111,
-        111,
-        113,
-        114,
-        116,
+	step3CompareResults := [...]byte{
+		116,
+		104,
+		109,
+		111,
+		111,
+		113,
+		114,
+		116,
 	}
 
-    if len(list) != len(results) {
+	if len(list) != len(results) {
 		panic("len(list) != len(results)")
 	}
-    for i, x := range(list) {
-        hex := HexSum([]byte(x))
+	for i, x := range list {
+		hex := HexSum([]byte(x))
 		if hex != results[i] {
-			t.Fatalf(hex)
+			t.Fatal(hex)
 		}
 	}
 
-    if len(list) != len(compareResults) + 1 {
+	if len(list) != len(compareResults)+1 {
 		panic("len(list) != len(compareResults) + 1")
 	}
-    last := Sum([]byte(list[0]))
-    for i, x := range list[1:] {
+	last := Sum([]byte(list[0]))
+	for i, x := range list[1:] {
 		sum := Sum([]byte(x))
 		bits := BitsDiff(&sum, &last)
 		if bits != compareResults[i] {
 			t.Fatalf("%x", bits)
 		}
-        last = sum
+		last = sum
 	}
 
-    j := 0
-    last = Sum([]byte(list[0]))
-    for i := 4; i < len(list); i += 3 {
+	j := 0
+	last = Sum([]byte(list[0]))
+	for i := 4; i < len(list); i += 3 {
 		sum := Sum([]byte(list[i]))
 		bits := BitsDiff(&sum, &last)
 		if bits != step3CompareResults[j] {
 			t.Fatalf("%x", bits)
 		}
-        last = sum
-        j += 1
+		last = sum
+		j += 1
 	}
 }
-
