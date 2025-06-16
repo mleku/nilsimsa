@@ -127,7 +127,7 @@ type Digest struct {
 // New create a new Nilsimsa hash diget
 func New() hash.Hash {
 	d := new(Digest)
-	// Note that no memory is allocate other than the struct itself. It is better to embedd
+	// Note that no memory is allocate other than the struct itself. It is better to embed
 	// last4Array into the struct itself since it's maximum size is know already
 	//	d.last4  = d.last4Array[:0] //creating the slice by re-slicing last4Array
 	return d
